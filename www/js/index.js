@@ -18,25 +18,30 @@
  */
 var app = {
     // Application Constructor
-    initialize: function() {
+    initialize: function () {
         this.bindEvents();
     },
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
+    bindEvents: function () {
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+            document.addEventListener("deviceready", this.onDeviceReady, false);
+        } else {
+            this.onDeviceReady();
+        }
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+    onDeviceReady: function () {
+        console.log('onDeviceReady');
+        app.showAsteroids();
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
+    receivedEvent: function (id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
@@ -46,4 +51,15 @@ var app = {
 
         console.log('Received Event: ' + id);
         console.log('Chrgement effectué');
+    },
+    showAsteroids: function () {
+        var url = 'https://api.nasa.gov/neo/rest/v1/feed?api_key=' + APIKEY;
+
+        $(function () {
+            $.get(url, function (data) {
+                console.log(data);
+            });
+        });
+
+    }
 };
